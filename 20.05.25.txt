@@ -1,0 +1,60 @@
+USE vit;
+
+CREATE TABLE Department (
+    DeptID INT,
+    DeptName VARCHAR(100)
+);
+
+ALTER TABLE Department
+ADD CONSTRAINT pk_dept PRIMARY KEY (DeptID);
+
+ALTER TABLE Department
+ADD CONSTRAINT uq_deptname UNIQUE (DeptName);
+
+CREATE TABLE Employee (
+    EmpID INT,
+    EmpName VARCHAR(100),
+    Email VARCHAR(100),
+    Salary DECIMAL(10,2),
+    DeptID INT,
+    Age INT
+);
+
+ALTER TABLE Employee
+ADD CONSTRAINT pk_emp PRIMARY KEY (EmpID);
+
+ALTER TABLE Employee
+ADD CONSTRAINT uq_email UNIQUE (Email);
+
+ALTER TABLE Employee
+MODIFY EmpName VARCHAR(100) NOT NULL;
+
+ALTER TABLE Employee
+ADD CONSTRAINT fk_emp_dept FOREIGN KEY (DeptID) REFERENCES Department(DeptID);
+
+ALTER TABLE Employee
+ADD CONSTRAINT chk_age CHECK (Age >= 18);
+
+ALTER TABLE Employee
+ADD CONSTRAINT chk_salary CHECK (Salary > 0);
+
+INSERT INTO Department (DeptID, DeptName) VALUES
+(1, 'HR'),
+(2, 'IT'),
+(3, 'Finance');
+
+INSERT INTO Employee (EmpID, EmpName, Email, Salary, DeptID, Age) VALUES
+(101, 'Alice Johnson', 'alice.johnson@vit.edu', 50000.00, 1, 25),
+(102, 'Bob Smith', 'bob.smith@vit.edu', 60000.00, 2, 30),
+(103, 'Charlie Brown', 'charlie.brown@vit.edu', 55000.00, 3, 22),
+(104, 'David Lee', 'david.lee@vit.edu', 62000.00, 2, 28),
+(105, 'Eve Thomas', 'eve.thomas@vit.edu', 58000.00, 1, 26);
+
+ALTER TABLE Employee
+DROP FOREIGN KEY fk_emp_dept;
+
+ALTER TABLE Employee
+DROP INDEX uq_email;
+
+ALTER TABLE Employee
+DROP CHECK chk_age;
